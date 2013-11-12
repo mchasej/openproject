@@ -30,6 +30,11 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 
 describe Api::V2::PlanningElementTypesController, :type => :controller do
   let (:current_user) { FactoryGirl.create(:admin) }
+  let(:anonymous_role_with_permissions) do
+    role = FactoryGirl.create(:anonymous_role)
+    role.update_attribute(:permissions, [:view_projects])
+    role.save!
+  end
 
   before do
     allow(@controller).to receive(:require_login)
@@ -163,8 +168,11 @@ describe Api::V2::PlanningElementTypesController, :type => :controller do
   end
 
   describe 'without project scope' do
+
     describe 'index.xml' do
       def fetch
+        anonymous_role_with_permissions
+
         get 'index', :format => 'xml'
       end
       it_should_behave_like "a controller action with unrestricted access"
@@ -232,6 +240,8 @@ describe Api::V2::PlanningElementTypesController, :type => :controller do
         end
 
         def fetch
+          anonymous_role_with_permissions
+
           get 'show', :id => '1337', :format => 'xml'
         end
         it_should_behave_like "a controller action with unrestricted access"
