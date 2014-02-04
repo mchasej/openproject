@@ -33,11 +33,13 @@ describe 'api/experimental/projects/show.api.rabl', :type => :view do
   let(:members)   { FactoryGirl.build_list(:member, 3, principal: principal) }
   let(:types)     { FactoryGirl.build_list(:type,   2) }
 
-  let(:project)   { FactoryGirl.build(:project,
-    possible_responsible_members: members,
-    possible_assignee_members:    members,
-    types:                        types
-  )}
+  let(:project) do
+    p = FactoryGirl.build_stubbed(:project, types: types)
+    allow(p).to receive(:possible_responsibles).and_return(members)
+    allow(p).to receive(:possible_assignees).and_return(members)
+
+    p
+  end
 
   before do
     params[:format] = 'json'
