@@ -28,8 +28,8 @@ See doc/COPYRIGHT.rdoc for more details.
 ++#%>
 
 <%
-possible_project_types = @project ? @project.types : Project.all.map(&:types).reduce{|memo,t| memo & t} || []
-gon.project_types = possible_project_types.map{ |type| [type.id, type.name] }
+possible_work_package_types = @project ? @project.types : Project.all.map(&:types).reduce{|memo,t| memo & t} || []
+gon.work_package_types = possible_work_package_types.map{ |type| [type.id, type.name] }
 # TODO fetch data from API endpoint
 # TODO: move this out of the view
 
@@ -73,7 +73,7 @@ end
 
   <div class="dropdown dropdown-relative dropdown-anchor-right" id="tasksDropdown">
     <ul class="dropdown-menu">
-      <li><a ng-href="" ng-repeat="(id, obj) in projectTypes">{{obj[1]}}</a></li>
+      <li><a ng-href="work_packages/new?work_package[type_id]={{ id }}" ng-repeat="(id, obj) in workPackageTypes">{{obj[1]}}</a></li>
     </ul>
   </div>
 

@@ -45,7 +45,7 @@ angular.module('openproject.workPackages.controllers')
       WorkPackageLoadingHelper, INITIALLY_SELECTED_COLUMNS,
       OPERATORS_AND_LABELS_BY_FILTER_TYPE) {
 
-  $scope.projectTypes = $window.gon.project_types;
+  $scope.workPackageTypes = $window.gon.work_package_types;
   $scope.showFiltersOptions = false;
 
 
