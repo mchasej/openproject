@@ -33,6 +33,7 @@ describe 'API v3 Activity resource', :type => :request do
   include Rack::Test::Methods
 
   let(:current_user) { FactoryGirl.create(:user) }
+  let(:anonymous) { FactoryGirl.create(:anonymous) }
   let(:project) { FactoryGirl.create(:project, is_public: false) }
   let(:work_package) { FactoryGirl.create(:work_package, author: current_user, project: project) }
   let(:role) { FactoryGirl.create(:role, permissions: [:view_work_packages]) }
@@ -91,8 +92,15 @@ describe 'API v3 Activity resource', :type => :request do
       let(:get_path) { "/api/v3/activities/#{activity.id}" }
       let(:project) { FactoryGirl.create(:project, is_public: true) }
 
+      before do
+        allow(User).to receive(:current).and_return anonymous
+      end
+
       context 'when access for anonymous user is allowed' do
-        before { get get_path }
+        before do
+          allow(Setting).to receive(:login_required?).and_return(false)
+          get get_path
+        end
 
         it 'should respond with 200' do
           expect(subject.status).to eq(200)
@@ -106,10 +114,9 @@ describe 'API v3 Activity resource', :type => :request do
 
       context 'when access for anonymous user is not allowed' do
         before do
-          Setting.login_required = 1
+          allow(Setting).to receive(:login_required?).and_return(true)
           get get_path
         end
-        after { Setting.login_required = 0 }
 
         it 'should respond with 401' do
           expect(subject.status).to eq(401)
