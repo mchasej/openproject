@@ -27,8 +27,7 @@
 # See doc/COPYRIGHT.rdoc for more details.
 #++
 
-require 'rfpdf/fpdf'
-require 'tcpdf'
+require 'rbpdf'
 
 module WorkPackage::PdfExporter
   include ActionView::Helpers::TextHelper
