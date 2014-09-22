@@ -28,7 +28,7 @@
 
 require 'spec_helper'
 require 'rack/test'
-require_relative 'api_helper_spec'
+require_relative '../support/api_helper_spec'
 
 describe API::V3::WorkPackages::WorkPackagesAPI, :type => :request do
   let(:admin) { FactoryGirl.create(:admin) }
